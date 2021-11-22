@@ -12,6 +12,7 @@ class Oystercard
   def top_up(value)
     raise "The limit is £#{LIMIT}" if (@balance + value) > LIMIT 
     @balance += value
+    
   end
 
   def deduct(trip)
@@ -23,6 +24,7 @@ class Oystercard
   end
 
   def touch_in
+    fail "Insufficient funds" if @balance < 1
     @status = true
   end
 
