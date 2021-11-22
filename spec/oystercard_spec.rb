@@ -21,10 +21,36 @@ describe Oystercard do
     describe '#deduct' do
       it 'Charges users after a trip' do
         oyster = Oystercard.new
-        oyster.balance
         oyster.top_up(5)
-        oyster.deduct(3)
+        expect(oyster.deduct(3)).to eq(2)
+      end
+    end
+  
+    describe '#in_journey?' do
+      it 'check if card is in journey' do
+        oyster = Oystercard.new
+        expect(oyster.in_journey?).to eq false
       end
     end
 
+    describe '#touch_in' do
+      it 'check if card is in journey when user starts trip' do
+        oyster = Oystercard.new
+        oyster.touch_in
+        expect(oyster.in_journey?).to eq true
+      end
+    end
+
+    describe '#touch_out' do
+      it 'check if card has finished journey' do
+        oyster = Oystercard.new
+        oyster.touch_in
+        oyster.touch_out
+        expect(oyster.in_journey?).to eq false
+      end
+    end
 end
+
+
+
+
