@@ -10,10 +10,8 @@ class Oystercard
   end
 
   def top_up(value)
-    
     raise "The limit is £#{LIMIT}" if (@balance + value) > LIMIT 
     @balance += value
-    
   end
 
   def deduct(trip)

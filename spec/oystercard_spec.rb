@@ -33,11 +33,18 @@ describe Oystercard do
       end
     end
 
-    describe '#touch_in' do
+    describe '#in_journey' do
       it 'check if card is in journey when user starts trip' do
         oyster = Oystercard.new
         oyster.touch_in
         expect(oyster.in_journey?).to eq true
+      end
+    end
+
+    describe '#touch_in' do
+      it 'Checks card has minimum balance required' do
+        oyster = Oystercard.new
+        expect(oyster.touch_in).to eq true
       end
     end
 
