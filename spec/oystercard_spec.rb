@@ -2,7 +2,7 @@ require 'oystercard'
 
 describe Oystercard do
 
-  let(:zone) { double :zone }
+  let(:station) { double :station }
 
   it 'checks balance' do
     oyster = Oystercard.new
@@ -43,18 +43,18 @@ describe Oystercard do
     describe '#touch_in' do
       it 'check if card is in journey when user starts trip' do
         subject.top_up(10)
-        subject.touch_in("zone")
+        subject.touch_in("station")
         expect(subject.in_journey?).to eq true
       end
   
       it 'will not touch in if below minimum balance' do
-        expect{ subject.touch_in("zone") }.to raise_error "Insufficient funds"
+        expect{ subject.touch_in("station") }.to raise_error "Insufficient funds"
       end
 
     it 'checks entry station when touched in' do
       subject.top_up(10)
-      subject.touch_in(zone)
-      expect(subject.entry_station).to eq(zone)
+      subject.touch_in(station)
+      expect(subject.entry_station).to eq(station)
     end
 
     end
@@ -69,18 +69,18 @@ describe Oystercard do
       it 'charges the oyster at end of trip' do
         oyster = Oystercard.new
         oyster.top_up(5)
-        oyster.touch_in("zone")
+        oyster.touch_in("station")
         expect { oyster.touch_out("not home") }.to change{oyster.balance}.by (-1)
       end
       it 'resets entry station to nil' do
         subject.top_up(10)
-        subject.touch_in("Zone 5")
+        subject.touch_in("station 5")
         subject.touch_out("not home")
         expect(subject.entry_station).to eq(nil)
     end
       it 'checks a journey has been created' do
         subject.top_up(10)
-        subject.touch_in("Zone 5")
+        subject.touch_in("station 5")
         subject.touch_out("not home")
         expect(subject.journeys.count).not_to eq 0
       end
