@@ -1,6 +1,9 @@
 require 'oystercard'
 
 describe Oystercard do
+
+  let(:touch_in) { double :Oystercard, touch_in: zone1 }
+
   it 'checks balance' do
     oyster = Oystercard.new
     expect(oyster.balance).to eq 0
@@ -36,15 +39,20 @@ describe Oystercard do
     describe '#touch_in' do
       it 'check if card is in journey when user starts trip' do
         subject.top_up(10)
-        subject.touch_in
+        subject.touch_in("zone")
         expect(subject.in_journey?).to eq true
       end
+  
+      it 'will not touch in if below minimum balance' do
+        expect{ subject.touch_in("zone") }.to raise_error "Insufficient funds"
+      end
+
+    it 'checks entry station when touched in' do
+      subject.top_up(10)
+      subject.touch_in("Zone 5")
+      expect(subject.entry_station).to eq("Zone 5")
     end
 
-    describe '#touch_in' do
-      it 'will not touch in if below minimum balance' do
-        expect{ subject.touch_in }.to raise_error "Insufficient funds"
-      end
     end
 
     describe '#touch_out' do
@@ -57,10 +65,15 @@ describe Oystercard do
       it 'charges the oyster' do
         oyster = Oystercard.new
         oyster.top_up(5)
-        oyster.touch_in
-        
+        oyster.touch_in("zone")
         expect { oyster.touch_out }.to change{oyster.balance}.by (-1)
       end
+      it 'resets entry station to nil' do
+        subject.top_up(10)
+        subject.touch_in("Zone 5")
+        subject.touch_out
+        expect(subject.entry_station).to eq(nil)
+    end
     end
 end
 
