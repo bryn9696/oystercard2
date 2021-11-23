@@ -1,9 +1,16 @@
 require 'oystercard'
 
 describe Oystercard do
+
+  let(:zone) { double :zone }
+
   it 'checks balance' do
     oyster = Oystercard.new
     expect(oyster.balance).to eq 0
+  end
+
+  it 'checks for an empty journeys list' do
+    expect(subject.journeys.count).to eq 0
   end
   
   describe '#top_up' do
@@ -36,32 +43,46 @@ describe Oystercard do
     describe '#touch_in' do
       it 'check if card is in journey when user starts trip' do
         subject.top_up(10)
-        subject.touch_in
+        subject.touch_in("zone")
         expect(subject.in_journey?).to eq true
       end
+  
+      it 'will not touch in if below minimum balance' do
+        expect{ subject.touch_in("zone") }.to raise_error "Insufficient funds"
+      end
+
+    it 'checks entry station when touched in' do
+      subject.top_up(10)
+      subject.touch_in(zone)
+      expect(subject.entry_station).to eq(zone)
     end
 
-    describe '#touch_in' do
-      it 'will not touch in if below minimum balance' do
-        expect{ subject.touch_in }.to raise_error "Insufficient funds"
-      end
     end
 
     describe '#touch_out' do
       it 'check if card has finished journey' do
         oyster = Oystercard.new
-        oyster.touch_out
+        oyster.touch_out("not home")
         expect(oyster.in_journey?).to eq false
       end
 
-      it 'charges the oyster' do
+      it 'charges the oyster at end of trip' do
         oyster = Oystercard.new
         oyster.top_up(5)
-        oyster.touch_in
-        
-        expect { oyster.touch_out }.to change{oyster.balance}.by (-1)
+        oyster.touch_in("zone")
+        expect { oyster.touch_out("not home") }.to change{oyster.balance}.by (-1)
+      end
+      it 'resets entry station to nil' do
+        subject.top_up(10)
+        subject.touch_in("Zone 5")
+        subject.touch_out("not home")
+        expect(subject.entry_station).to eq(nil)
+    end
+      it 'checks a journey has been created' do
+        subject.top_up(10)
+        subject.touch_in("Zone 5")
+        subject.touch_out("not home")
+        expect(subject.journeys.count).not_to eq 0
       end
     end
 end
-
-let(:touch_in) {double :Oystercard, touch_in(zone1): zone1}
