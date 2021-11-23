@@ -19,7 +19,7 @@ describe Oystercard do
     end
   
     describe '#deduct' do
-      it 'Charges users after a trip' do
+      xit 'Charges users after a trip' do
         oyster = Oystercard.new
         oyster.top_up(5)
         expect(oyster.deduct(3)).to eq(2)
@@ -52,6 +52,14 @@ describe Oystercard do
         oyster = Oystercard.new
         oyster.touch_out
         expect(oyster.in_journey?).to eq false
+      end
+
+      it 'charges the oyster' do
+        oyster = Oystercard.new
+        oyster.top_up(5)
+        oyster.touch_in
+        
+        expect { oyster.touch_out }.to change{oyster.balance}.by (-1)
       end
     end
 end
