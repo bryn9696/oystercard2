@@ -64,3 +64,4 @@ describe Oystercard do
     end
 end
 
+let(:touch_in) {double :Oystercard, touch_in(zone1): zone1}
