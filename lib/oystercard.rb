@@ -26,13 +26,13 @@ class Oystercard
     amount = journey.fare("In")
     deduct(amount)
     fail "Insufficient funds" if @balance < 1
-    @journey.journey_start(start)
+    @journey.journey_log.journey_start(start)
   end
 
   def touch_out(exit_station)
     amount = journey.fare("Out")
     deduct(amount)
-    @journey.journey_end(exit_station)
+    @journey.journey_log.journey_end(exit_station)
   end
 
   private

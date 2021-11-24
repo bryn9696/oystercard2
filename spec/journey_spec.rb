@@ -3,9 +3,7 @@ require 'oystercard'
 require 'station'
 
 describe Journey do
-  it 'checks for an empty journeys list' do
-    expect(subject.journeys.count).to eq 0
-  end
+
 
   describe '#in_journey?' do
     it 'check if card is in journey' do
@@ -26,7 +24,7 @@ describe Journey do
       oyster = Oystercard.new
       oyster.top_up(10)
       oyster.touch_in("station")
-      expect(oyster.journey.entry_station).to eq("station")
+      expect(oyster.journey.journey_log.entry_station).to eq("station")
     end
 
     end
@@ -44,15 +42,9 @@ describe Journey do
         oyster.top_up(10)
         oyster.touch_in("station 5")
         oyster.touch_out("not home")
-        expect(subject.entry_station).to eq(nil)
+        expect(oyster.journey.journey_log.entry_station).to eq(nil)
     end
-      it 'checks a journey has been created' do
-        oyster = Oystercard.new
-        oyster.top_up(10)
-        oyster.touch_in("station 5")
-        oyster.touch_out("not home")
-        expect(oyster.journey.journeys.count).not_to eq 0
-      end
+     
     end
 
     context "Fares" do
@@ -66,12 +58,12 @@ describe Journey do
       end
 
       it "Should return a penalty fare if no exit station" do
-        subject.journey_start("Waterloo")
+        subject.journey_log.journey_start("Waterloo")
         expect(subject.fare("In")).to eq(6)
       end
 
       it "Should return a minimum fare if no penalty" do
-        subject.journey_start("Waterloo")
+        subject.journey_log.journey_start("Waterloo")
         expect(subject.fare("Out")).to eq(1)
       end
     end
