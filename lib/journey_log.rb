@@ -1,6 +1,8 @@
-class Journey_log
+# frozen_string_literal: true
 
+class Journey_log
   attr_reader :entry_station
+
   def initialize
     @entry_station = nil
     @journeys = []
@@ -11,16 +13,17 @@ class Journey_log
   end
 
   def journey_end(exit_station)
-    @journeys << {entry: @entry_station, end_trip: exit_station}
+    @journeys << { entry: @entry_station, end_trip: exit_station }
     @entry_station = nil
   end
 
   def journey_history
-    return journey_list
+    journey_list
   end
 
   private
+
   def journey_list
-    return @journeys
+    @journeys
   end
 end
