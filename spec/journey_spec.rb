@@ -17,48 +17,41 @@ describe Journey do
     describe '#touch_in' do
       it 'check if card is in journey when user starts trip' do
         oyster = Oystercard.new
-        journey = Journey.new
         oyster.top_up(10)
         oyster.touch_in("station")
-        expect(oyster.in_journey?).to eq true
-      end
-  
-      it 'will not touch in if below minimum balance' do
-        expect{ subject.touch_in("station") }.to raise_error "Insufficient funds"
+        expect(oyster.journey.in_journey?).to eq true
       end
 
     it 'checks entry station when touched in' do
-      subject.top_up(10)
-      subject.touch_in(station)
-      expect(subject.entry_station).to eq(station)
+      oyster = Oystercard.new
+      oyster.top_up(10)
+      oyster.touch_in("station")
+      expect(oyster.journey.entry_station).to eq("station")
     end
 
     end
 
     describe '#touch_out' do
       it 'check if card has finished journey' do
+        journey = Journey.new
         oyster = Oystercard.new
         oyster.touch_out("not home")
-        expect(oyster.in_journey?).to eq false
+        expect(journey.in_journey?).to eq false
       end
 
-      it 'charges the oyster at end of trip' do
-        oyster = Oystercard.new
-        oyster.top_up(5)
-        oyster.touch_in("station")
-        expect { oyster.touch_out("not home") }.to change{oyster.balance}.by (-1)
-      end
       it 'resets entry station to nil' do
-        subject.top_up(10)
-        subject.touch_in("station 5")
-        subject.touch_out("not home")
+        oyster = Oystercard.new
+        oyster.top_up(10)
+        oyster.touch_in("station 5")
+        oyster.touch_out("not home")
         expect(subject.entry_station).to eq(nil)
     end
       it 'checks a journey has been created' do
-        subject.top_up(10)
-        subject.touch_in("station 5")
-        subject.touch_out("not home")
-        expect(subject.journeys.count).not_to eq 0
+        oyster = Oystercard.new
+        oyster.top_up(10)
+        oyster.touch_in("station 5")
+        oyster.touch_out("not home")
+        expect(oyster.journey.journeys.count).not_to eq 0
       end
     end
   end

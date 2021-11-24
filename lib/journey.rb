@@ -5,7 +5,6 @@ class Journey
 
   attr_reader :entry_station, :journeys
 
-  MINIMUM_FARE = 1
   def initialize
     @entry_station = nil
     @journeys = []
@@ -19,13 +18,11 @@ class Journey
     end
   end
 
-  def touch_in(start)
-    fail "Insufficient funds" if @balance < 1
-    @entry_station = entry_station
+  def journey_start(start)
+    @entry_station = start
   end
 
-  def touch_out(exit_station)
-    deduct(MINIMUM_FARE)
+  def journey_end(exit_station)
     @journeys << {entry: @entry_station, end_trip: exit_station}
     @entry_station = nil
   end
