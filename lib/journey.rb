@@ -24,18 +24,26 @@ class Journey
   def fare(inout, zone = 1)
     if inout == 'In'
       @zone_in = zone
-      if in_journey? == true
-        return 6
-      else
-        return 0
-      end
+      return fare_in
     end
     if inout == 'Out'
-      if @journey_log.entry_station.nil?
-        6
-      else
-        fare_calc(zone)
-      end
+      return fare_out(zone)
+    end
+  end
+
+  def fare_in
+    if in_journey? == true
+      return 6
+    else
+      return 0
+    end
+  end
+
+  def fare_out(zone)
+    if @journey_log.entry_station.nil?
+      return 6
+    else
+      return fare_calc(zone)
     end
   end
 
