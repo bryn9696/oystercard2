@@ -29,18 +29,18 @@ class Journey
   end
 
   def fare(inout)
-    if inout = "In"
+    if inout == "In"
       if in_journey? == true
         return 6
       else
-        0
+        return 0
       end
     end
-    if inout = "Out"
+    if inout == "Out"
       if @entry_station == nil
         return 6
       else
-        MINIMUM_FARE
+        return MINIMUM_FARE
       end
     end
   end

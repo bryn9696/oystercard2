@@ -58,19 +58,21 @@ describe Journey do
     context "Fares" do
 
       it "Should return a fare" do
-        expect(subject.fare).to be_instance_of(Integer)
+        expect(subject.fare("In")).to be_instance_of(Integer)
       end
 
       it "Should return a penalty fare if no entry station" do
-        expect(subject.fare).to eq(6)
+        expect(subject.fare("Out")).to eq(6)
       end
 
       it "Should return a penalty fare if no exit station" do
-        expect(subject.fare).to eq(6)
+        subject.journey_start("Waterloo")
+        expect(subject.fare("In")).to eq(6)
       end
 
       it "Should return a minimum fare if no penalty" do
-        expect(subject.fare).to eq(1)
+        subject.journey_start("Waterloo")
+        expect(subject.fare("Out")).to eq(1)
       end
     end
   end
