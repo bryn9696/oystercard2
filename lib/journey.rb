@@ -3,6 +3,7 @@ require_relative 'station.rb'
 
 class Journey
 
+  MINIMUM_FARE = 1
   attr_reader :entry_station, :journeys
 
   def initialize
@@ -25,6 +26,23 @@ class Journey
   def journey_end(exit_station)
     @journeys << {entry: @entry_station, end_trip: exit_station}
     @entry_station = nil
+  end
+
+  def fare(inout)
+    if inout = "In"
+      if in_journey? == true
+        return 6
+      else
+        0
+      end
+    end
+    if inout = "Out"
+      if @entry_station == nil
+        return 6
+      else
+        MINIMUM_FARE
+      end
+    end
   end
 
 end

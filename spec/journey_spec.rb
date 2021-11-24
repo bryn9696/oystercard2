@@ -54,4 +54,23 @@ describe Journey do
         expect(oyster.journey.journeys.count).not_to eq 0
       end
     end
+
+    context "Fares" do
+
+      it "Should return a fare" do
+        expect(subject.fare).to be_instance_of(Integer)
+      end
+
+      it "Should return a penalty fare if no entry station" do
+        expect(subject.fare).to eq(6)
+      end
+
+      it "Should return a penalty fare if no exit station" do
+        expect(subject.fare).to eq(6)
+      end
+
+      it "Should return a minimum fare if no penalty" do
+        expect(subject.fare).to eq(1)
+      end
+    end
   end
